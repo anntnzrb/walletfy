@@ -10,7 +10,12 @@ import {
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { useForm, zodResolver } from "@mantine/form";
-import { IconCheck, IconPaperclip, IconRefresh, IconX } from "@tabler/icons-react";
+import {
+	IconCheck,
+	IconPaperclip,
+	IconRefresh,
+	IconX,
+} from "@tabler/icons-react";
 import React, { useCallback } from "react";
 import { useAppDispatch } from "../redux/hooks";
 import { addEvent, updateEvent } from "../redux/slices/eventsSlice";

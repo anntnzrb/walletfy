@@ -14,7 +14,7 @@ La aplicación combina los requisitos obligatorios del con principios suckless d
 - **Estado**: Redux Toolkit con Thunks
 - **Data Fetching**: React Query (Tanstack Query) para cache y sincronización
 - **Validación**: Zod para esquemas
-- **Fechas**: MomentJS para operaciones de fecha
+- **Fechas**: Day.js para operaciones de fecha
 - **UI**: Mantine library (componentes necesarios)
 - **Estilos**: Tailwind CSS
 - **Persistencia**: LocalStorage del navegador
@@ -30,7 +30,7 @@ La aplicación combina los requisitos obligatorios del con principios suckless d
 - **Estado**: Redux Toolkit con Thunks 
 - **Data Fetching**: React Query (Tanstack Query)
 - **Validación**: Zod 
-- **Fechas**: MomentJS 
+- **Fechas**: Day.js 
 - **Estilos**: Tailwind CSS 
 - **Componentes UI**: Mantine library (simplificado pero funcional)
 - **Tooltips**: React Tooltip (especificado en requisitos)
@@ -171,7 +171,7 @@ Sección para crear nuevos eventos o editar eventos existentes.
    - TextInput de Mantine con icono de búsqueda
    - Placeholder: "Buscar por mes y año (ej: Diciembre 2024)"
    - Implementación con debouncing usando custom hook
-   - Spotlight de Mantine como alternativa avanzada de búsqueda
+   - Filtrado y búsqueda optimizada con debouncing
 
 ## Consideraciones Técnicas
 
@@ -241,7 +241,7 @@ src/
 - **Componentes planos**: Sin sub-carpetas innecesarias (suckless)
 - **Modularidad**: Cada archivo con responsabilidad única (SRP)
 - **Schemas**: Validaciones Zod separadas
-- **Utils**: Helpers para fechas MomentJS y storage
+- **Utils**: Helpers para fechas Day.js y storage
 - **Types**: Interfaces TypeScript para type safety
 
 ## Dependencias Principales
@@ -251,7 +251,7 @@ src/
 - **Estado**: redux
 - **Data Fetching**: @tanstack/react-query
 - **Validación**: zod
-- **Fechas**: momentks
+- **Fechas**: dayjs
 - **Estilos**: tailwindcss
 - **UI**: mantine
 - **Tooltips**: react-tooltip (especificado en requisitos)

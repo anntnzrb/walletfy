@@ -10,11 +10,9 @@ export const useInitialData = () => {
 	const { setColorScheme } = useMantineColorScheme();
 
 	useEffect(() => {
-		// Load events from localStorage
 		const savedEvents = storageUtils.loadEvents();
 		dispatch(setEvents(savedEvents));
 
-		// Load theme from localStorage
 		const savedTheme = storageUtils.loadTheme();
 		dispatch(setTheme(savedTheme));
 		// Sync Mantine color scheme with loaded theme

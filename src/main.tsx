@@ -7,14 +7,12 @@ import { store } from "./redux/store";
 
 import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provider.tsx";
 
-// Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 
-// Create a new router instance
 const router = createRouter({
 	routeTree,
 	context: {
@@ -76,7 +74,6 @@ const theme = createTheme({
 	primaryColor: "blue",
 });
 
-// Render the app
 const rootElement = document.getElementById("app");
 if (rootElement && !rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);

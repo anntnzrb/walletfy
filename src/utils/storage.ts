@@ -7,7 +7,6 @@ const STORAGE_KEYS = {
 } as const;
 
 export const storageUtils = {
-	// Events storage
 	saveEvents: (events: Event[]): void => {
 		try {
 			const serializedEvents = JSON.stringify(events);
@@ -35,7 +34,6 @@ export const storageUtils = {
 		}
 	},
 
-	// Theme storage
 	saveTheme: (theme: ThemeMode): void => {
 		try {
 			localStorage.setItem(STORAGE_KEYS.THEME, theme);
@@ -57,7 +55,6 @@ export const storageUtils = {
 		}
 	},
 
-	// Clear all data
 	clearAll: (): void => {
 		try {
 			localStorage.removeItem(STORAGE_KEYS.EVENTS);

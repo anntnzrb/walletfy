@@ -62,7 +62,6 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 				dispatch(addEvent(values));
 			}
 
-			// Save to localStorage
 			const events = storageUtils.loadEvents();
 			const updatedEvents =
 				isEditing && event

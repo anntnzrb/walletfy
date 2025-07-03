@@ -15,7 +15,6 @@ const EventListComponent: React.FC<EventListProps> = ({ onEditEvent }) => {
 	const [searchTerm, setSearchTerm] = useState("");
 
 	const groupedEvents = useMemo(() => {
-		// Filter events by search term
 		const filteredEvents = events.filter(
 			(event) =>
 				event.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -26,13 +25,10 @@ const EventListComponent: React.FC<EventListProps> = ({ onEditEvent }) => {
 					.includes(searchTerm.toLowerCase()),
 		);
 
-		// Sort events by date (newest first)
 		const sortedEvents = dateHelpers.sortEventsByDate(filteredEvents);
 
-		// Group by month
 		const grouped = dateHelpers.groupEventsByMonth(sortedEvents);
 
-		// Sort months by year-month (newest first)
 		const sortedMonthKeys = Object.keys(grouped).sort((a, b) =>
 			b.localeCompare(a),
 		);

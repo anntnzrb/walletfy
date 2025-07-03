@@ -70,9 +70,23 @@ const theme = createTheme({
 			"#1e3a8a",
 			"#172554",
 		],
+		dark: [
+			"#f8f9fa",
+			"#e9ecef",
+			"#dee2e6",
+			"#ced4da",
+			"#adb5bd",
+			"#6c757d",
+			"#495057",
+			"#343a40",
+			"#212529",
+			"#16181b",
+		],
 	},
 	primaryColor: "blue",
 	fontFamily: "'Ubuntu Sans Mono', monospace",
+	white: "#ffffff",
+	black: "#000000",
 });
 
 const rootElement = document.getElementById("app");

@@ -2,14 +2,31 @@
 
 body {
 	@apply m-0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-		sans-serif;
+	font-family: "Ubuntu Sans Mono", monospace;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
 
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-		monospace;
+	font-family: "Ubuntu Sans Mono", source-code-pro, Menlo, Monaco, Consolas,
+		"Courier New", monospace;
+}
+
+/* Improve dark mode contrast */
+[data-mantine-color-scheme="dark"] {
+	--mantine-color-text: #f8f9fa;
+	--mantine-color-dimmed: #e9ecef;
+	--mantine-color-placeholder: #adb5bd;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-Text-root,
+[data-mantine-color-scheme="dark"] .mantine-Title-root,
+[data-mantine-color-scheme="dark"] .mantine-TextInput-input,
+[data-mantine-color-scheme="dark"] .mantine-Input-input {
+	color: #f8f9fa !important;
+}
+
+[data-mantine-color-scheme="dark"] .mantine-TextInput-input::placeholder,
+[data-mantine-color-scheme="dark"] .mantine-Input-input::placeholder {
+	color: #adb5bd !important;
 }

@@ -72,6 +72,7 @@ const theme = createTheme({
 		],
 	},
 	primaryColor: "blue",
+	fontFamily: "'Ubuntu Sans Mono', monospace",
 });
 
 const rootElement = document.getElementById("app");

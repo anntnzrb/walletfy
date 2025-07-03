@@ -6,23 +6,11 @@ Walletfy es una aplicación web de gestión financiera personal que permite a lo
 
 ### Arquitectura de la Aplicación
 
-La aplicación combina los requisitos obligatorios del con principios suckless donde es posible. Desarrollada en React con TypeScript:
-- **Runtime**: Bun 1.2
-- **Lenguaje**: TypeScript 100% (sin JavaScript)
-- **Framework**: React con TypeScript
-- **Bundler**: Vite
-- **Estado**: Redux Toolkit con Thunks
-- **Data Fetching**: React Query (Tanstack Query) para cache y sincronización
-- **Validación**: Zod para esquemas
-- **Fechas**: Day.js para operaciones de fecha
-- **UI**: Mantine library (componentes necesarios)
-- **Estilos**: Tailwind CSS
-- **Persistencia**: LocalStorage del navegador
-- **Arquitectura**: Modular con SRP, estructura simple
+La aplicación combina los requisitos obligatorios con principios suckless donde es posible. Desarrollada en React con TypeScript, siguiendo arquitectura modular con SRP y estructura simple.
 
 ## Requisitos Técnicos
 
-### Stack Tecnológico (Requisitos  + Filosofía)
+### Stack Tecnológico (Requisitos + Filosofía)
 - **Runtime**: Bun 1.2
 - **Lenguaje**: TypeScript (100% - No JavaScript permitido)
 - **Framework**: React con TypeScript
@@ -63,7 +51,6 @@ Acorde a la temática financiera, se utilizará una paleta que inspire confianza
 - **Programación Funcional**: map, filter, reduce en lugar de loops imperativos 
 - **Programación Imperativa**: Preferir paradigma funcional, evitar patrones imperativos y procedurales
 - **Componentes con children**: Al menos uno debe usar prop children 
-- **TypeScript Estricto**: Configuración estricta, sin any permitido
 - **Modularidad**: Organización clara por entidad/funcionalidad 
 - **KISS**: Mantener simplicidad dentro de restricciones
 - **Minimal SLOC**: Usar el mínimo código necesario para cumplir requisitos
@@ -272,6 +259,5 @@ Configuración estricta requerida:
 - Interfaces tipadas para todas las entidades y props de componentes
 
 ### Configuración Minimalista
-- **Mantine**: Configuración básica con tema light/dark simple
-- **Colores**: Verde (#22c55e) para ingresos, rojo (#ef4444) para egresos
+- **Mantine**: Configuración básica con tema light/dark simple  
 - **Tailwind**: CSS utilities directo sin configuración compleja

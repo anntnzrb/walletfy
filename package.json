@@ -5,9 +5,8 @@
 	"scripts": {
 		"dev": "vite --port 3000",
 		"start": "vite --port 3000",
-		"build": "vite build && tsc",
+		"build": "vite build",
 		"serve": "vite preview",
-		"test": "vitest run",
 		"fmt": "biome format --write",
 		"lint": "biome lint --write",
 		"check": "biome check --write"
@@ -17,8 +16,6 @@
 		"@mantine/dates": "^8.1.2",
 		"@mantine/form": "^8.1.2",
 		"@mantine/hooks": "^8.1.2",
-		"@mantine/notifications": "^8.1.2",
-		"@mantine/spotlight": "^8.1.2",
 		"@reduxjs/toolkit": "^2.8.2",
 		"@tabler/icons-react": "^3.34.0",
 		"@tailwindcss/vite": "^4.0.6",
@@ -27,7 +24,7 @@
 		"@tanstack/react-router": "^1.121.2",
 		"@tanstack/react-router-devtools": "^1.121.2",
 		"@tanstack/router-plugin": "^1.121.2",
-		"moment": "^2.30.1",
+		"dayjs": "^1.11.13",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-redux": "^9.2.0",
@@ -38,17 +35,11 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@testing-library/dom": "^10.4.0",
-		"@testing-library/react": "^16.2.0",
-		"@types/moment": "^2.13.0",
 		"@types/react": "^19.0.8",
 		"@types/react-dom": "^19.0.3",
 		"@types/uuid": "^10.0.0",
 		"@vitejs/plugin-react": "^4.3.4",
-		"jsdom": "^26.0.0",
 		"typescript": "^5.7.2",
-		"vite": "^6.1.0",
-		"vitest": "^3.0.5",
-		"web-vitals": "^4.2.4"
+		"vite": "^6.1.0"
 	}
 }

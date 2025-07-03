@@ -4,14 +4,10 @@ import type { Event } from "../../types/Event";
 
 interface EventsState {
 	events: Event[];
-	loading: boolean;
-	error: string | null;
 }
 
 const initialState: EventsState = {
 	events: [],
-	loading: false,
-	error: null,
 };
 
 const eventsSlice = createSlice({
@@ -41,21 +37,9 @@ const eventsSlice = createSlice({
 				(event) => event.id !== action.payload,
 			);
 		},
-		setLoading: (state, action: PayloadAction<boolean>) => {
-			state.loading = action.payload;
-		},
-		setError: (state, action: PayloadAction<string | null>) => {
-			state.error = action.payload;
-		},
 	},
 });
 
-export const {
-	setEvents,
-	addEvent,
-	updateEvent,
-	deleteEvent,
-	setLoading,
-	setError,
-} = eventsSlice.actions;
+export const { setEvents, addEvent, updateEvent, deleteEvent } =
+	eventsSlice.actions;
 export default eventsSlice.reducer;

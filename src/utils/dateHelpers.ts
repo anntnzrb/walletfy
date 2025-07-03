@@ -1,23 +1,24 @@
-import moment from "moment";
+import dayjs from "dayjs";
+import "dayjs/locale/es";
 import type { Event } from "../types/Event";
 
-// Configure moment to use Spanish locale
-moment.locale("es");
+// Configure dayjs to use Spanish locale
+dayjs.locale("es");
 
 export const dateHelpers = {
 	// Format date for display (DD/MM/YYYY)
 	formatDate: (date: Date): string => {
-		return moment(date).format("DD/MM/YYYY");
+		return dayjs(date).format("DD/MM/YYYY");
 	},
 
 	// Get month and year for grouping
 	getMonthYear: (date: Date): string => {
-		return moment(date).format("MMMM YYYY");
+		return dayjs(date).format("MMMM YYYY");
 	},
 
 	// Get month key for grouping (YYYY-MM)
 	getMonthKey: (date: Date): string => {
-		return moment(date).format("YYYY-MM");
+		return dayjs(date).format("YYYY-MM");
 	},
 
 	// Group events by month
@@ -37,26 +38,26 @@ export const dateHelpers = {
 
 	// Sort events by date (newest first)
 	sortEventsByDate: (events: Event[]): Event[] => {
-		return [...events].sort((a, b) => moment(b.fecha).diff(moment(a.fecha)));
+		return [...events].sort((a, b) => dayjs(b.fecha).diff(dayjs(a.fecha)));
 	},
 
 	// Get formatted month name for display
 	getMonthName: (monthKey: string): string => {
-		return moment(monthKey, "YYYY-MM").format("MMMM YYYY");
+		return dayjs(monthKey, "YYYY-MM").format("MMMM YYYY");
 	},
 
 	// Check if date is valid
 	isValidDate: (date: Date): boolean => {
-		return moment(date).isValid();
+		return dayjs(date).isValid();
 	},
 
 	// Get current date
 	getCurrentDate: (): Date => {
-		return moment().toDate();
+		return dayjs().toDate();
 	},
 
 	// Parse date string to Date object
 	parseDate: (dateString: string): Date => {
-		return moment(dateString).toDate();
+		return dayjs(dateString).toDate();
 	},
 };

@@ -1,53 +1,33 @@
 import dayjs from "dayjs";
 import "dayjs/locale/es";
+import { pipe, Array as A, Record } from "effect";
 import type { Event } from "../types/Event";
 
 dayjs.locale("es");
 
 export const dateHelpers = {
-	formatDate: (date: Date): string => {
-		return dayjs(date).format("DD/MM/YYYY");
-	},
+	formatDate: (date: Date): string => dayjs(date).format("DD/MM/YYYY"),
 
-	getMonthYear: (date: Date): string => {
-		return dayjs(date).format("MMMM YYYY");
-	},
+	getMonthYear: (date: Date): string => dayjs(date).format("MMMM YYYY"),
 
-	getMonthKey: (date: Date): string => {
-		return dayjs(date).format("YYYY-MM");
-	},
+	getMonthKey: (date: Date): string => dayjs(date).format("YYYY-MM"),
 
-	groupEventsByMonth: (events: Event[]): Record<string, Event[]> => {
-		return events.reduce(
-			(groups, event) => {
-				const monthKey = dateHelpers.getMonthKey(event.fecha);
-				if (!groups[monthKey]) {
-					groups[monthKey] = [];
-				}
-				groups[monthKey].push(event);
-				return groups;
-			},
-			{} as Record<string, Event[]>,
-		);
-	},
+	groupEventsByMonth: (events: Event[]): Record<string, Event[]> => pipe(
+		events,
+		A.groupBy(event => dateHelpers.getMonthKey(event.fecha)),
+		Record.map(A.sort((a, b) => dayjs(b.fecha).diff(dayjs(a.fecha))))
+	),
 
-	sortEventsByDate: (events: Event[]): Event[] => {
-		return [...events].sort((a, b) => dayjs(b.fecha).diff(dayjs(a.fecha)));
-	},
+	sortEventsByDate: (events: Event[]): Event[] => pipe(
+		events,
+		A.sort((a, b) => dayjs(b.fecha).diff(dayjs(a.fecha)))
+	),
 
-	getMonthName: (monthKey: string): string => {
-		return dayjs(monthKey, "YYYY-MM").format("MMMM YYYY");
-	},
+	getMonthName: (monthKey: string): string => dayjs(monthKey, "YYYY-MM").format("MMMM YYYY"),
 
-	isValidDate: (date: Date): boolean => {
-		return dayjs(date).isValid();
-	},
+	isValidDate: (date: Date): boolean => dayjs(date).isValid(),
 
-	getCurrentDate: (): Date => {
-		return dayjs().toDate();
-	},
+	getCurrentDate: (): Date => dayjs().toDate(),
 
-	parseDate: (dateString: string): Date => {
-		return dayjs(dateString).toDate();
-	},
+	parseDate: (dateString: string): Date => dayjs(dateString).toDate(),
 };

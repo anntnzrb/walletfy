@@ -1,4 +1,5 @@
 import { Effect, Option, pipe } from "effect";
+import { mockEvents } from "../data/mockEvents";
 import type { ThemeMode } from "../redux/slices/themeSlice";
 import type { Event } from "../types/Event";
 
@@ -89,6 +90,56 @@ export const storageUtils = {
 				localStorage.removeItem(STORAGE_KEYS.THEME);
 			}),
 			catchAll(() => sync(() => console.error("Error clearing localStorage"))),
+			runSync,
+		);
+	},
+
+	loadMockData: (): Event[] => {
+		return pipe(
+			sync(() => localStorage.getItem(STORAGE_KEYS.EVENTS)),
+			map(Option.fromNullable),
+			flatMap(
+				Option.match({
+					onNone: () => succeed(mockEvents),
+					onSome: (data) => 
+						tryEffect(() => {
+							const existingEvents = parseEvents(data);
+							const existingIds = new Set(existingEvents.map(e => e.id));
+							const newMockEvents = mockEvents.filter(e => !existingIds.has(e.id));
+							return [...existingEvents, ...newMockEvents];
+						}),
+				}),
+			),
+			flatMap((mergedEvents) =>
+				sync(() => {
+					localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(mergedEvents));
+					return mergedEvents;
+				}),
+			),
+			catchAll(() => succeed(mockEvents)),
+			runSync,
+		);
+	},
+
+	removeMockData: (): Event[] => {
+		const mockIds = new Set(mockEvents.map(e => e.id));
+		return pipe(
+			sync(() => localStorage.getItem(STORAGE_KEYS.EVENTS)),
+			map(Option.fromNullable),
+			flatMap(
+				Option.match({
+					onNone: () => succeed([]),
+					onSome: (data) => tryEffect(() => parseEvents(data)),
+				}),
+			),
+			flatMap((existingEvents) =>
+				sync(() => {
+					const filteredEvents = existingEvents.filter(e => !mockIds.has(e.id));
+					localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(filteredEvents));
+					return filteredEvents;
+				}),
+			),
+			catchAll(() => succeed([])),
 			runSync,
 		);
 	},

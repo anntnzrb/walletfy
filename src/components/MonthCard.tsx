@@ -1,4 +1,4 @@
-import { Badge, Card, Group, Image, Modal, Stack, Text } from "@mantine/core";
+import { Badge, Card, Group, Image, Modal, SimpleGrid, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { pipe } from "effect";
 import React, { useCallback, useMemo, useState } from "react";
@@ -81,7 +81,11 @@ const MonthCardComponent: React.FC<MonthCardProps> = ({
 						</Group>
 					</Group>
 
-					<Stack gap="xs">
+					<SimpleGrid
+						cols={{ base: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+						spacing="md"
+						verticalSpacing="md"
+					>
 						{events.map((event) => (
 							<EventDisplay.Root
 								key={event.id}
@@ -93,7 +97,7 @@ const MonthCardComponent: React.FC<MonthCardProps> = ({
 								<EventDisplay.Card />
 							</EventDisplay.Root>
 						))}
-					</Stack>
+					</SimpleGrid>
 				</Stack>
 			</Card>
 

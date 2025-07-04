@@ -1,4 +1,4 @@
-import { Card, Group } from "@mantine/core";
+import { Card, Group, Stack, Text } from "@mantine/core";
 import React from "react";
 import { useEventDisplayContext } from "./EventDisplay";
 import { EventDisplayActions } from "./EventDisplayActions";
@@ -7,8 +7,8 @@ import { EventDisplayTitle } from "./EventDisplayTitle";
 import type { EventDisplayCardProps } from "./types";
 
 const EventDisplayCardComponent: React.FC<EventDisplayCardProps> = ({
-	padding = "sm",
-	radius = "sm",
+	padding = "md",
+	radius = "md",
 	withBorder = true,
 }) => {
 	const { event } = useEventDisplayContext();
@@ -19,14 +19,24 @@ const EventDisplayCardComponent: React.FC<EventDisplayCardProps> = ({
 			padding={padding}
 			radius={radius}
 			withBorder={withBorder}
+			style={{ height: "100%" }}
 		>
-			<Group justify="space-between" align="center">
-				<Group gap="sm" align="center">
-					<EventDisplayTitle />
-					<EventDisplayBadge />
+			<Stack gap="md" style={{ height: "100%" }}>
+				<Group justify="center" style={{ minHeight: "60px", alignItems: "center" }}>
+					<EventDisplayBadge size="lg" />
 				</Group>
+				
+				<Stack gap="xs" style={{ flex: 1 }}>
+					<EventDisplayTitle />
+					{event.descripcion && (
+						<Text size="sm" c="dimmed" lineClamp={3}>
+							{event.descripcion}
+						</Text>
+					)}
+				</Stack>
+				
 				<EventDisplayActions />
-			</Group>
+			</Stack>
 		</Card>
 	);
 };

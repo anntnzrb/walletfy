@@ -18,12 +18,21 @@ import {
 } from "@tabler/icons-react";
 import { Match, Option, Effect } from "effect";
 import React, { useCallback } from "react";
+
 import { useAppDispatch } from "../redux/hooks";
 import { addEvent, updateEvent } from "../redux/slices/eventsSlice";
 import { type EventFormData, eventCreateSchema } from "../schemas/eventSchema";
 import type { Event } from "../types/Event";
 import { dateHelpers } from "../utils/dateHelpers";
 import { storageUtils } from "../utils/storage";
+
+const { fromNullable, getOrElse, match } = Option;
+const { value, when, orElse } = Match;
+const { sync, tryPromise, tap, catchAll, runPromise } = Effect;
+
+function getOrDefault<T>(value: T | undefined, defaultValue: T): T {
+	return fromNullable(value).pipe(getOrElse(() => defaultValue));
+}
 
 interface EventFormProps {
 	event?: Event;
@@ -41,24 +50,12 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 
 	const form = useForm<EventFormData>({
 		initialValues: {
-			nombre: Option.fromNullable(event?.nombre).pipe(
-				Option.getOrElse(() => ""),
-			),
-			descripcion: Option.fromNullable(event?.descripcion).pipe(
-				Option.getOrElse(() => ""),
-			),
-			cantidad: Option.fromNullable(event?.cantidad).pipe(
-				Option.getOrElse(() => 0),
-			),
-			fecha: Option.fromNullable(event?.fecha).pipe(
-				Option.getOrElse(() => dateHelpers.getCurrentDate()),
-			),
-			tipo: Option.fromNullable(event?.tipo).pipe(
-				Option.getOrElse(() => "ingreso" as const),
-			),
-			adjunto: Option.fromNullable(event?.adjunto).pipe(
-				Option.getOrElse(() => ""),
-			),
+			nombre: getOrDefault(event?.nombre, ""),
+			descripcion: getOrDefault(event?.descripcion, ""),
+			cantidad: getOrDefault(event?.cantidad, 0),
+			fecha: getOrDefault(event?.fecha, dateHelpers.getCurrentDate()),
+			tipo: getOrDefault(event?.tipo, "ingreso" as const),
+			adjunto: getOrDefault(event?.adjunto, ""),
 		},
 		validate: zodResolver(eventCreateSchema),
 	});
@@ -66,21 +63,21 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 	const handleSubmit = useCallback(
 		(values: EventFormData) => {
 			// Dispatch Redux action
-			Match.value({ isEditing, event }).pipe(
-				Match.when({ isEditing: true }, ({ event }) => {
+			value({ isEditing, event }).pipe(
+				when({ isEditing: true }, ({ event }) => {
 					const updatedEvent: Event = { ...event, ...values };
 					dispatch(updateEvent(updatedEvent));
 				}),
-				Match.orElse(() => dispatch(addEvent(values))),
+				orElse(() => dispatch(addEvent(values))),
 			);
 
 			// Update localStorage
 			const events = storageUtils.loadEvents();
-			const updatedEvents = Match.value({ isEditing, event }).pipe(
-				Match.when({ isEditing: true }, ({ event }) =>
+			const updatedEvents = value({ isEditing, event }).pipe(
+				when({ isEditing: true }, ({ event }) =>
 					events.map((e) => (e.id === event.id ? { ...event, ...values } : e)),
 				),
-				Match.orElse(() => [...events, { ...values, id: crypto.randomUUID() }]),
+				orElse(() => [...events, { ...values, id: crypto.randomUUID() }]),
 			);
 
 			storageUtils.saveEvents(updatedEvents);
@@ -100,20 +97,18 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 					reader.readAsDataURL(file);
 				});
 
-			Option.fromNullable(file).pipe(
-				Option.match({
-					onNone: () => Effect.sync(() => form.setFieldValue("adjunto", "")),
+			fromNullable(file).pipe(
+				match({
+					onNone: () => sync(() => form.setFieldValue("adjunto", "")),
 					onSome: (file) =>
-						Effect.tryPromise(() => readFileAsBase64(file)).pipe(
-							Effect.tap((base64) =>
-								Effect.sync(() => form.setFieldValue("adjunto", base64)),
+						tryPromise(() => readFileAsBase64(file)).pipe(
+							tap((base64) =>
+								sync(() => form.setFieldValue("adjunto", base64)),
 							),
-							Effect.catchAll(() =>
-								Effect.sync(() => console.error("Failed to read file")),
-							),
+							catchAll(() => sync(() => console.error("Failed to read file"))),
 						),
 				}),
-				Effect.runPromise,
+				runPromise,
 			);
 		},
 		[form],

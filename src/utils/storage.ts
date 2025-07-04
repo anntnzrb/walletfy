@@ -13,6 +13,8 @@ const {
 	runSync,
 } = Effect;
 
+const { fromNullable, match } = Option;
+
 const STORAGE_KEYS = {
 	EVENTS: "walletfy_events",
 	THEME: "walletfy_theme",
@@ -46,9 +48,9 @@ export const storageUtils = {
 	loadEvents: (): Event[] => {
 		return pipe(
 			sync(() => localStorage.getItem(STORAGE_KEYS.EVENTS)),
-			map(Option.fromNullable),
+			map(fromNullable),
 			flatMap(
-				Option.match({
+				match({
 					onNone: () => succeed([]),
 					onSome: (data) => tryEffect(() => parseEvents(data)),
 				}),
@@ -71,9 +73,9 @@ export const storageUtils = {
 	loadTheme: (): ThemeMode => {
 		return pipe(
 			sync(() => localStorage.getItem(STORAGE_KEYS.THEME)),
-			map(Option.fromNullable),
+			map(fromNullable),
 			flatMap(
-				Option.match({
+				match({
 					onNone: () => succeed("light" as ThemeMode),
 					onSome: (theme) => succeed(isValidTheme(theme) ? theme : "light"),
 				}),
@@ -97,9 +99,9 @@ export const storageUtils = {
 	loadMockData: (): Event[] => {
 		return pipe(
 			sync(() => localStorage.getItem(STORAGE_KEYS.EVENTS)),
-			map(Option.fromNullable),
+			map(fromNullable),
 			flatMap(
-				Option.match({
+				match({
 					onNone: () => succeed(mockEvents),
 					onSome: (data) =>
 						tryEffect(() => {
@@ -130,9 +132,9 @@ export const storageUtils = {
 		const mockIds = new Set(mockEvents.map((e) => e.id));
 		return pipe(
 			sync(() => localStorage.getItem(STORAGE_KEYS.EVENTS)),
-			map(Option.fromNullable),
+			map(fromNullable),
 			flatMap(
-				Option.match({
+				match({
 					onNone: () => succeed([]),
 					onSome: (data) => tryEffect(() => parseEvents(data)),
 				}),

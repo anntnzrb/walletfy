@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import "dayjs/locale/es";
 import { pipe, Array as A, Record } from "effect";
-import type { Event } from "../types/Event";
+import type { Event } from "@/types/Event";
 
 dayjs.locale("es");
 

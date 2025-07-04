@@ -3,9 +3,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
-import { EventForm } from "../components/EventForm";
-import { EventList } from "../components/EventList";
-import type { Event } from "../types/Event";
+import { EventForm } from "@/components/EventForm";
+import { EventList } from "@/components/EventList";
+import type { Event } from "@/types/Event";
 
 function BalancePage() {
 	const [opened, { open, close }] = useDisclosure(false);

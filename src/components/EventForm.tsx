@@ -19,12 +19,12 @@ import {
 import { Match, Option, Effect } from "effect";
 import React, { useCallback } from "react";
 
-import { useAppDispatch } from "../redux/hooks";
-import { addEvent, updateEvent } from "../redux/slices/eventsSlice";
-import { type EventFormData, eventCreateSchema } from "../schemas/eventSchema";
-import type { Event } from "../types/Event";
-import { dateHelpers } from "../utils/dateHelpers";
-import { storageUtils } from "../utils/storage";
+import { useAppDispatch } from "@/redux/hooks";
+import { addEvent, updateEvent } from "@/redux/slices/eventsSlice";
+import { type EventFormData, eventCreateSchema } from "@/schemas/eventSchema";
+import type { Event } from "@/types/Event";
+import { dateHelpers } from "@/utils/dateHelpers";
+import { storageUtils } from "@/utils/storage";
 
 const { fromNullable, getOrElse, match } = Option;
 const { value, when, orElse } = Match;

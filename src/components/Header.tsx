@@ -7,11 +7,11 @@ import {
 } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import React from "react";
-import { useAppDispatch } from "../redux/hooks";
-import { setEvents } from "../redux/slices/eventsSlice";
-import type { Event } from "../types/Event";
-import { storageUtils } from "../utils/storage";
-import { ThemeToggle } from "./ThemeToggle";
+import { useAppDispatch } from "@/redux/hooks";
+import { setEvents } from "@/redux/slices/eventsSlice";
+import type { Event } from "@/types/Event";
+import { storageUtils } from "@/utils/storage";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const HeaderComponent = () => {
 	const dispatch = useAppDispatch();

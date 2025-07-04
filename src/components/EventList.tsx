@@ -1,10 +1,10 @@
 import { Center, Stack, Text, TextInput } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import React, { useMemo, useState } from "react";
-import { useAppSelector } from "../redux/hooks";
-import type { Event } from "../types/Event";
-import { dateHelpers } from "../utils/dateHelpers";
-import { MonthCard } from "./MonthCard";
+import { useAppSelector } from "@/redux/hooks";
+import type { Event } from "@/types/Event";
+import { dateHelpers } from "@/utils/dateHelpers";
+import { MonthCard } from "@/components/MonthCard";
 
 interface EventListProps {
 	onEditEvent: (event: Event) => void;

@@ -1,7 +1,7 @@
 import { Container, Paper, Title } from "@mantine/core";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
-import { EventForm } from "../components/EventForm";
+import { EventForm } from "@/components/EventForm";
 
 function NewEventPage() {
 	const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import type { Event } from "../../../types/Event";
+import type { Event } from "@/types/Event";
 
 export const getEventColor = (tipo: Event["tipo"]) =>
 	tipo === "ingreso" ? "green" : "red";

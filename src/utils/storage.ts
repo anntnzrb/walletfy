@@ -1,7 +1,7 @@
 import { Effect, Option, pipe } from "effect";
-import { mockEvents } from "../data/mockEvents";
-import type { ThemeMode } from "../redux/slices/themeSlice";
-import type { Event } from "../types/Event";
+import { mockEvents } from "@/data/mockEvents";
+import type { ThemeMode } from "@/redux/slices/themeSlice";
+import type { Event } from "@/types/Event";
 
 const {
 	sync,

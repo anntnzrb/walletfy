@@ -6,13 +6,13 @@ import "dayjs/locale/es";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { store } from "./redux/store";
+import { store } from "@/redux/store";
 
-import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provider.tsx";
+import * as TanStackQueryProvider from "@/integrations/tanstack-query/root-provider.tsx";
 
-import { routeTree } from "./routeTree.gen";
+import { routeTree } from "@/routeTree.gen";
 
-import "./styles.css";
+import "@/styles.css";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 

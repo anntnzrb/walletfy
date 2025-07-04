@@ -1,4 +1,4 @@
-import type { Event } from "../../../types/Event";
+import type { Event } from "@/types/Event";
 
 export interface EventDisplayContextValue {
 	event: Event;

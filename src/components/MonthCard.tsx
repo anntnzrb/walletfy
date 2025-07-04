@@ -11,12 +11,12 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { pipe } from "effect";
 import React, { useCallback, useMemo, useState } from "react";
-import { useAppDispatch } from "../redux/hooks";
-import { deleteEvent } from "../redux/slices/eventsSlice";
-import type { Event } from "../types/Event";
-import { dateHelpers } from "../utils/dateHelpers";
-import { storageUtils } from "../utils/storage";
-import { EventDisplay, formatCurrency } from "./ui/EventDisplay";
+import { useAppDispatch } from "@/redux/hooks";
+import { deleteEvent } from "@/redux/slices/eventsSlice";
+import type { Event } from "@/types/Event";
+import { dateHelpers } from "@/utils/dateHelpers";
+import { storageUtils } from "@/utils/storage";
+import { EventDisplay, formatCurrency } from "@/components/ui/EventDisplay";
 
 interface MonthCardProps {
 	monthKey: string;

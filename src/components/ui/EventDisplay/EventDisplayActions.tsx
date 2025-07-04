@@ -1,7 +1,7 @@
 import { ActionIcon, Group, Text } from "@mantine/core";
 import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
 import React from "react";
-import { dateHelpers } from "../../../utils/dateHelpers";
+import { dateHelpers } from "@/utils/dateHelpers";
 import { useEventDisplayContext } from "./EventDisplay";
 
 const EventDisplayActionsComponent: React.FC = () => {

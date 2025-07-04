@@ -1,9 +1,9 @@
 import { ActionIcon, useMantineColorScheme } from "@mantine/core";
 import { IconMoon, IconSun } from "@tabler/icons-react";
 import React, { useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { toggleTheme } from "../redux/slices/themeSlice";
-import { storageUtils } from "../utils/storage";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { toggleTheme } from "@/redux/slices/themeSlice";
+import { storageUtils } from "@/utils/storage";
 
 const ThemeToggleComponent: React.FC = () => {
 	const dispatch = useAppDispatch();

@@ -1,6 +1,6 @@
 import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-import type { Event } from "../../types/Event";
+import type { Event } from "@/types/Event";
 
 interface EventsState {
 	events: Event[];

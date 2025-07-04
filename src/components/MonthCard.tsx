@@ -1,125 +1,16 @@
-import {
-	ActionIcon,
-	Badge,
-	Card,
-	Group,
-	Image,
-	Modal,
-	Stack,
-	Text,
-} from "@mantine/core";
+import { Badge, Card, Group, Image, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
 import { pipe } from "effect";
 import React, { useCallback, useMemo, useState } from "react";
-import { Tooltip } from "react-tooltip";
 import { useAppDispatch } from "../redux/hooks";
 import { deleteEvent } from "../redux/slices/eventsSlice";
 import type { Event } from "../types/Event";
 import { dateHelpers } from "../utils/dateHelpers";
 import { storageUtils } from "../utils/storage";
+import { EventBadge } from "./EventBadge";
+import { EventCard } from "./EventCard";
 
-const getEventColor = (tipo: Event["tipo"]) =>
-	tipo === "ingreso" ? "green" : "red";
-const getEventSign = (tipo: Event["tipo"]) => (tipo === "ingreso" ? "+" : "-");
 const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
-const getTooltipContent = (descripcion?: string) =>
-	descripcion || "Sin descripción";
-interface EventActionsProps {
-	event: Event;
-	onView: (event: Event) => void;
-	onEdit: (event: Event) => void;
-	onDelete: (eventId: string) => void;
-}
-
-const EventActions: React.FC<EventActionsProps> = ({
-	event,
-	onView,
-	onEdit,
-	onDelete,
-}) => (
-	<Group gap="xs">
-		<Text size="sm" c="gray.6">
-			{dateHelpers.formatDate(event.fecha)}
-		</Text>
-		<ActionIcon
-			size="sm"
-			variant="subtle"
-			color="blue"
-			onClick={() => onView(event)}
-		>
-			<IconEye size={16} />
-		</ActionIcon>
-		<ActionIcon
-			size="sm"
-			variant="subtle"
-			color="yellow"
-			onClick={() => onEdit(event)}
-		>
-			<IconEdit size={16} />
-		</ActionIcon>
-		<ActionIcon
-			size="sm"
-			variant="subtle"
-			color="red"
-			onClick={() => onDelete(event.id)}
-		>
-			<IconTrash size={16} />
-		</ActionIcon>
-	</Group>
-);
-interface EventBadgeProps {
-	event: Event;
-	variant?: "filled" | "light";
-	size?: "sm" | "md" | "lg";
-}
-
-const EventBadge: React.FC<EventBadgeProps> = ({
-	event,
-	variant = "filled",
-	size = "sm",
-}) => (
-	<Badge color={getEventColor(event.tipo)} variant={variant} size={size}>
-		{getEventSign(event.tipo)}
-		{formatCurrency(event.cantidad)}
-	</Badge>
-);
-interface EventCardProps {
-	event: Event;
-	onView: (event: Event) => void;
-	onEdit: (event: Event) => void;
-	onDelete: (eventId: string) => void;
-}
-
-const EventCard: React.FC<EventCardProps> = ({
-	event,
-	onView,
-	onEdit,
-	onDelete,
-}) => (
-	<Card key={event.id} padding="sm" radius="sm" withBorder>
-		<Group justify="space-between" align="center">
-			<Group gap="sm" align="center">
-				<Text
-					fw={500}
-					data-tooltip-id={`tooltip-${event.id}`}
-					data-tooltip-content={getTooltipContent(event.descripcion)}
-					style={{ cursor: "pointer" }}
-				>
-					{event.nombre}
-				</Text>
-				<Tooltip id={`tooltip-${event.id}`} />
-				<EventBadge event={event} />
-			</Group>
-			<EventActions
-				event={event}
-				onView={onView}
-				onEdit={onEdit}
-				onDelete={onDelete}
-			/>
-		</Group>
-	</Card>
-);
 
 interface MonthCardProps {
 	monthKey: string;

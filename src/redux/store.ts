@@ -7,6 +7,13 @@ export const store = configureStore({
 		events: eventsReducer,
 		theme: themeReducer,
 	},
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredPaths: ["events.events"],
+				ignoredActionsPaths: ["payload"],
+			},
+		}),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

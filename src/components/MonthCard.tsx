@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconEdit, IconEye, IconTrash } from "@tabler/icons-react";
+import { pipe } from "effect";
 import React, { useCallback, useMemo, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { useAppDispatch } from "../redux/hooks";
@@ -17,6 +18,83 @@ import { deleteEvent } from "../redux/slices/eventsSlice";
 import type { Event } from "../types/Event";
 import { dateHelpers } from "../utils/dateHelpers";
 import { storageUtils } from "../utils/storage";
+
+// Helper functions for better readability
+const getEventColor = (tipo: Event["tipo"]) => (tipo === "ingreso" ? "green" : "red");
+const getEventSign = (tipo: Event["tipo"]) => (tipo === "ingreso" ? "+" : "-");
+const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+const getTooltipContent = (descripcion?: string) => descripcion || "Sin descripción";
+
+// Event actions component to reduce repetition
+interface EventActionsProps {
+	event: Event;
+	onView: (event: Event) => void;
+	onEdit: (event: Event) => void;
+	onDelete: (eventId: string) => void;
+}
+
+const EventActions: React.FC<EventActionsProps> = ({ event, onView, onEdit, onDelete }) => (
+	<Group gap="xs">
+		<Text size="sm" c="gray.6">
+			{dateHelpers.formatDate(event.fecha)}
+		</Text>
+		<ActionIcon size="sm" variant="subtle" color="blue" onClick={() => onView(event)}>
+			<IconEye size={16} />
+		</ActionIcon>
+		<ActionIcon size="sm" variant="subtle" color="yellow" onClick={() => onEdit(event)}>
+			<IconEdit size={16} />
+		</ActionIcon>
+		<ActionIcon size="sm" variant="subtle" color="red" onClick={() => onDelete(event.id)}>
+			<IconTrash size={16} />
+		</ActionIcon>
+	</Group>
+);
+
+// Event badge component for amount display
+interface EventBadgeProps {
+	event: Event;
+	variant?: "filled" | "light";
+	size?: "sm" | "md" | "lg";
+}
+
+const EventBadge: React.FC<EventBadgeProps> = ({ event, variant = "filled", size = "sm" }) => (
+	<Badge color={getEventColor(event.tipo)} variant={variant} size={size}>
+		{getEventSign(event.tipo)}{formatCurrency(event.cantidad)}
+	</Badge>
+);
+
+// Individual event card component
+interface EventCardProps {
+	event: Event;
+	onView: (event: Event) => void;
+	onEdit: (event: Event) => void;
+	onDelete: (eventId: string) => void;
+}
+
+const EventCard: React.FC<EventCardProps> = ({ event, onView, onEdit, onDelete }) => (
+	<Card key={event.id} padding="sm" radius="sm" withBorder>
+		<Group justify="space-between" align="center">
+			<Group gap="sm" align="center">
+				<Text
+					fw={500}
+					data-tooltip-id={`tooltip-${event.id}`}
+					data-tooltip-content={getTooltipContent(event.descripcion)}
+					style={{ cursor: "pointer" }}
+				>
+					{event.nombre}
+				</Text>
+				<Tooltip id={`tooltip-${event.id}`} />
+				<EventBadge event={event} />
+			</Group>
+			<EventActions 
+				event={event} 
+				onView={onView} 
+				onEdit={onEdit} 
+				onDelete={onDelete} 
+			/>
+		</Group>
+	</Card>
+);
 
 interface MonthCardProps {
 	monthKey: string;
@@ -39,13 +117,17 @@ const MonthCardComponent: React.FC<MonthCardProps> = ({
 	);
 
 	const { totalIngresos, totalEgresos } = useMemo(() => {
-		const ingresos = events
-			.filter((event) => event.tipo === "ingreso")
-			.reduce((sum, event) => sum + event.cantidad, 0);
-		const egresos = events
-			.filter((event) => event.tipo === "egreso")
-			.reduce((sum, event) => sum + event.cantidad, 0);
-		return { totalIngresos: ingresos, totalEgresos: egresos };
+		const calculateTotal = (tipo: Event["tipo"]) =>
+			pipe(
+				events,
+				(events) => events.filter((event) => event.tipo === tipo),
+				(filteredEvents) => filteredEvents.reduce((sum, event) => sum + event.cantidad, 0)
+			);
+
+		return {
+			totalIngresos: calculateTotal("ingreso"),
+			totalEgresos: calculateTotal("egreso"),
+		};
 	}, [events]);
 
 	const handleDeleteEvent = useCallback(
@@ -77,71 +159,23 @@ const MonthCardComponent: React.FC<MonthCardProps> = ({
 						</Text>
 						<Group gap="sm">
 							<Badge color="green" variant="light">
-								Ingresos: ${totalIngresos.toFixed(2)}
+								Ingresos: {formatCurrency(totalIngresos)}
 							</Badge>
 							<Badge color="red" variant="light">
-								Egresos: ${totalEgresos.toFixed(2)}
+								Egresos: {formatCurrency(totalEgresos)}
 							</Badge>
 						</Group>
 					</Group>
 
 					<Stack gap="xs">
 						{events.map((event) => (
-							<Card key={event.id} padding="sm" radius="sm" withBorder>
-								<Group justify="space-between" align="center">
-									<Group gap="sm" align="center">
-										<Text
-											fw={500}
-											data-tooltip-id={`tooltip-${event.id}`}
-											data-tooltip-content={
-												event.descripcion || "Sin descripción"
-											}
-											style={{ cursor: "pointer" }}
-										>
-											{event.nombre}
-										</Text>
-										<Tooltip id={`tooltip-${event.id}`} />
-										<Badge
-											color={event.tipo === "ingreso" ? "green" : "red"}
-											variant="filled"
-											size="sm"
-										>
-											{event.tipo === "ingreso" ? "+" : "-"}$
-											{event.cantidad.toFixed(2)}
-										</Badge>
-									</Group>
-
-									<Group gap="xs">
-										<Text size="sm" c="gray.6">
-											{dateHelpers.formatDate(event.fecha)}
-										</Text>
-										<ActionIcon
-											size="sm"
-											variant="subtle"
-											color="blue"
-											onClick={() => handleViewEvent(event)}
-										>
-											<IconEye size={16} />
-										</ActionIcon>
-										<ActionIcon
-											size="sm"
-											variant="subtle"
-											color="yellow"
-											onClick={() => onEditEvent(event)}
-										>
-											<IconEdit size={16} />
-										</ActionIcon>
-										<ActionIcon
-											size="sm"
-											variant="subtle"
-											color="red"
-											onClick={() => handleDeleteEvent(event.id)}
-										>
-											<IconTrash size={16} />
-										</ActionIcon>
-									</Group>
-								</Group>
-							</Card>
+							<EventCard
+								key={event.id}
+								event={event}
+								onView={handleViewEvent}
+								onEdit={onEditEvent}
+								onDelete={handleDeleteEvent}
+							/>
 						))}
 					</Stack>
 				</Stack>
@@ -161,13 +195,7 @@ const MonthCardComponent: React.FC<MonthCardProps> = ({
 						</Group>
 						<Group justify="space-between">
 							<Text fw={500}>Cantidad:</Text>
-							<Badge
-								color={selectedEvent.tipo === "ingreso" ? "green" : "red"}
-								variant="filled"
-							>
-								{selectedEvent.tipo === "ingreso" ? "+" : "-"}$
-								{selectedEvent.cantidad.toFixed(2)}
-							</Badge>
+							<EventBadge event={selectedEvent} />
 						</Group>
 						<Group justify="space-between">
 							<Text fw={500}>Fecha:</Text>

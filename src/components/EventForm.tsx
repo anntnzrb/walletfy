@@ -16,6 +16,7 @@ import {
 	IconRefresh,
 	IconX,
 } from "@tabler/icons-react";
+import { Match } from "effect";
 import React, { useCallback } from "react";
 import { useAppDispatch } from "../redux/hooks";
 import { addEvent, updateEvent } from "../redux/slices/eventsSlice";
@@ -52,24 +53,25 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 
 	const handleSubmit = useCallback(
 		(values: EventFormData) => {
-			if (isEditing && event) {
-				const updatedEvent: Event = {
-					...event,
-					...values,
-				};
-				dispatch(updateEvent(updatedEvent));
-			} else {
-				dispatch(addEvent(values));
-			}
+			// Dispatch Redux action
+			Match.value({ isEditing, event }).pipe(
+				Match.when({ isEditing: true }, ({ event }) => {
+					const updatedEvent: Event = { ...event, ...values };
+					dispatch(updateEvent(updatedEvent));
+				}),
+				Match.orElse(() => dispatch(addEvent(values)))
+			);
 
+			// Update localStorage
 			const events = storageUtils.loadEvents();
-			const updatedEvents =
-				isEditing && event
-					? events.map((e) => (e.id === event.id ? { ...event, ...values } : e))
-					: [...events, { ...values, id: crypto.randomUUID() }];
+			const updatedEvents = Match.value({ isEditing, event }).pipe(
+				Match.when({ isEditing: true }, ({ event }) => 
+					events.map((e) => (e.id === event.id ? { ...event, ...values } : e))
+				),
+				Match.orElse(() => [...events, { ...values, id: crypto.randomUUID() }])
+			);
 
 			storageUtils.saveEvents(updatedEvents);
-
 			form.reset();
 			onSubmit?.();
 		},

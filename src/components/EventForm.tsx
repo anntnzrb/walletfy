@@ -16,7 +16,7 @@ import {
 	IconRefresh,
 	IconX,
 } from "@tabler/icons-react";
-import { Match, Option } from "effect";
+import { Match, Option, Effect } from "effect";
 import React, { useCallback } from "react";
 import { useAppDispatch } from "../redux/hooks";
 import { addEvent, updateEvent } from "../redux/slices/eventsSlice";
@@ -80,17 +80,25 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 
 	const handleFileUpload = useCallback(
 		(file: File | null) => {
-			if (!file) {
-				form.setFieldValue("adjunto", "");
-				return;
-			}
+			const readFileAsBase64 = (file: File): Promise<string> =>
+				new Promise((resolve, reject) => {
+					const reader = new FileReader();
+					reader.onload = () => resolve(reader.result as string);
+					reader.onerror = reject;
+					reader.readAsDataURL(file);
+				});
 
-			const reader = new FileReader();
-			reader.onload = (e) => {
-				const base64String = e.target?.result as string;
-				form.setFieldValue("adjunto", base64String);
-			};
-			reader.readAsDataURL(file);
+			Option.fromNullable(file).pipe(
+				Option.match({
+					onNone: () => Effect.sync(() => form.setFieldValue("adjunto", "")),
+					onSome: (file) =>
+						Effect.tryPromise(() => readFileAsBase64(file)).pipe(
+							Effect.tap((base64) => Effect.sync(() => form.setFieldValue("adjunto", base64))),
+							Effect.catchAll(() => Effect.sync(() => console.error("Failed to read file")))
+						),
+				}),
+				Effect.runPromise
+			);
 		},
 		[form],
 	);

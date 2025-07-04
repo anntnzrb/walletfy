@@ -1,4 +1,13 @@
-import { Badge, Card, Group, Image, Modal, SimpleGrid, Stack, Text } from "@mantine/core";
+import {
+	Badge,
+	Card,
+	Group,
+	Image,
+	Modal,
+	SimpleGrid,
+	Stack,
+	Text,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { pipe } from "effect";
 import React, { useCallback, useMemo, useState } from "react";

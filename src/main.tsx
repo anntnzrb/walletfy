@@ -101,7 +101,9 @@ if (rootElement && !rootElement.innerHTML) {
 		<StrictMode>
 			<Provider store={store}>
 				<MantineProvider theme={theme}>
-					<DatesProvider settings={{ locale: dayjs.locale(), firstDayOfWeek: 1 }}>
+					<DatesProvider
+						settings={{ locale: dayjs.locale(), firstDayOfWeek: 1 }}
+					>
 						<TanStackQueryProvider.Provider>
 							<RouterProvider router={router} />
 						</TanStackQueryProvider.Provider>

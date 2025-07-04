@@ -101,18 +101,23 @@ export const storageUtils = {
 			flatMap(
 				Option.match({
 					onNone: () => succeed(mockEvents),
-					onSome: (data) => 
+					onSome: (data) =>
 						tryEffect(() => {
 							const existingEvents = parseEvents(data);
-							const existingIds = new Set(existingEvents.map(e => e.id));
-							const newMockEvents = mockEvents.filter(e => !existingIds.has(e.id));
+							const existingIds = new Set(existingEvents.map((e) => e.id));
+							const newMockEvents = mockEvents.filter(
+								(e) => !existingIds.has(e.id),
+							);
 							return [...existingEvents, ...newMockEvents];
 						}),
 				}),
 			),
 			flatMap((mergedEvents) =>
 				sync(() => {
-					localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(mergedEvents));
+					localStorage.setItem(
+						STORAGE_KEYS.EVENTS,
+						JSON.stringify(mergedEvents),
+					);
 					return mergedEvents;
 				}),
 			),
@@ -122,7 +127,7 @@ export const storageUtils = {
 	},
 
 	removeMockData: (): Event[] => {
-		const mockIds = new Set(mockEvents.map(e => e.id));
+		const mockIds = new Set(mockEvents.map((e) => e.id));
 		return pipe(
 			sync(() => localStorage.getItem(STORAGE_KEYS.EVENTS)),
 			map(Option.fromNullable),
@@ -134,8 +139,13 @@ export const storageUtils = {
 			),
 			flatMap((existingEvents) =>
 				sync(() => {
-					const filteredEvents = existingEvents.filter(e => !mockIds.has(e.id));
-					localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(filteredEvents));
+					const filteredEvents = existingEvents.filter(
+						(e) => !mockIds.has(e.id),
+					);
+					localStorage.setItem(
+						STORAGE_KEYS.EVENTS,
+						JSON.stringify(filteredEvents),
+					);
 					return filteredEvents;
 				}),
 			),

@@ -148,7 +148,8 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 					valueFormat="DD/MM/YYYY"
 					value={form.values.fecha}
 					onChange={(value) => {
-						const dateValue = value instanceof Date ? value : value ? new Date(value) : null;
+						const dateValue =
+							value instanceof Date ? value : value ? new Date(value) : null;
 						form.setFieldValue("fecha", dateValue);
 						if (form.errors.fecha) {
 							form.clearFieldError("fecha");

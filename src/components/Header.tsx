@@ -1,5 +1,10 @@
 import { Button, Group, Title } from "@mantine/core";
-import { IconPlus, IconScale, IconDatabase, IconDatabaseOff } from "@tabler/icons-react";
+import {
+	IconPlus,
+	IconScale,
+	IconDatabase,
+	IconDatabaseOff,
+} from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import React from "react";
 import { useAppDispatch } from "../redux/hooks";
@@ -39,7 +44,9 @@ const HeaderComponent = () => {
 							<Button
 								variant="subtle"
 								color="white"
-								onClick={() => handleMockDataOperation(storageUtils.loadMockData)}
+								onClick={() =>
+									handleMockDataOperation(storageUtils.loadMockData)
+								}
 								title="Load Mock Data"
 							>
 								<IconDatabase size={18} />
@@ -47,7 +54,9 @@ const HeaderComponent = () => {
 							<Button
 								variant="subtle"
 								color="white"
-								onClick={() => handleMockDataOperation(storageUtils.removeMockData)}
+								onClick={() =>
+									handleMockDataOperation(storageUtils.removeMockData)
+								}
 								title="Remove Mock Data"
 							>
 								<IconDatabaseOff size={18} />

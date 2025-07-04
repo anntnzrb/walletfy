@@ -22,10 +22,13 @@ const EventDisplayCardComponent: React.FC<EventDisplayCardProps> = ({
 			style={{ height: "100%" }}
 		>
 			<Stack gap="md" style={{ height: "100%" }}>
-				<Group justify="center" style={{ minHeight: "60px", alignItems: "center" }}>
+				<Group
+					justify="center"
+					style={{ minHeight: "60px", alignItems: "center" }}
+				>
 					<EventDisplayBadge size="lg" />
 				</Group>
-				
+
 				<Stack gap="xs" style={{ flex: 1 }}>
 					<EventDisplayTitle />
 					{event.descripcion && (
@@ -34,7 +37,7 @@ const EventDisplayCardComponent: React.FC<EventDisplayCardProps> = ({
 						</Text>
 					)}
 				</Stack>
-				
+
 				<EventDisplayActions />
 			</Stack>
 		</Card>

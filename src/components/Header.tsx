@@ -1,10 +1,21 @@
 import { Button, Group, Title } from "@mantine/core";
-import { IconPlus, IconScale } from "@tabler/icons-react";
+import { IconPlus, IconScale, IconDatabase, IconDatabaseOff } from "@tabler/icons-react";
 import { Link } from "@tanstack/react-router";
 import React from "react";
+import { useAppDispatch } from "../redux/hooks";
+import { setEvents } from "../redux/slices/eventsSlice";
+import type { Event } from "../types/Event";
+import { storageUtils } from "../utils/storage";
 import { ThemeToggle } from "./ThemeToggle";
 
 const HeaderComponent = () => {
+	const dispatch = useAppDispatch();
+
+	const handleMockDataOperation = (operation: () => Event[]) => {
+		const events = operation();
+		dispatch(setEvents(events));
+	};
+
 	return (
 		<header className="p-4 bg-blue-600 text-white shadow-lg">
 			<Group justify="space-between" align="center">
@@ -24,6 +35,22 @@ const HeaderComponent = () => {
 								to="/events/new"
 							>
 								<IconPlus size={18} />
+							</Button>
+							<Button
+								variant="subtle"
+								color="white"
+								onClick={() => handleMockDataOperation(storageUtils.loadMockData)}
+								title="Load Mock Data"
+							>
+								<IconDatabase size={18} />
+							</Button>
+							<Button
+								variant="subtle"
+								color="white"
+								onClick={() => handleMockDataOperation(storageUtils.removeMockData)}
+								title="Remove Mock Data"
+							>
+								<IconDatabaseOff size={18} />
 							</Button>
 						</Group>
 					</nav>

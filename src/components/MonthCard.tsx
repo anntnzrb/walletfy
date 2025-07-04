@@ -19,13 +19,12 @@ import type { Event } from "../types/Event";
 import { dateHelpers } from "../utils/dateHelpers";
 import { storageUtils } from "../utils/storage";
 
-// Helper functions for better readability
-const getEventColor = (tipo: Event["tipo"]) => (tipo === "ingreso" ? "green" : "red");
+const getEventColor = (tipo: Event["tipo"]) =>
+	tipo === "ingreso" ? "green" : "red";
 const getEventSign = (tipo: Event["tipo"]) => (tipo === "ingreso" ? "+" : "-");
 const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
-const getTooltipContent = (descripcion?: string) => descripcion || "Sin descripción";
-
-// Event actions component to reduce repetition
+const getTooltipContent = (descripcion?: string) =>
+	descripcion || "Sin descripción";
 interface EventActionsProps {
 	event: Event;
 	onView: (event: Event) => void;
@@ -33,37 +32,58 @@ interface EventActionsProps {
 	onDelete: (eventId: string) => void;
 }
 
-const EventActions: React.FC<EventActionsProps> = ({ event, onView, onEdit, onDelete }) => (
+const EventActions: React.FC<EventActionsProps> = ({
+	event,
+	onView,
+	onEdit,
+	onDelete,
+}) => (
 	<Group gap="xs">
 		<Text size="sm" c="gray.6">
 			{dateHelpers.formatDate(event.fecha)}
 		</Text>
-		<ActionIcon size="sm" variant="subtle" color="blue" onClick={() => onView(event)}>
+		<ActionIcon
+			size="sm"
+			variant="subtle"
+			color="blue"
+			onClick={() => onView(event)}
+		>
 			<IconEye size={16} />
 		</ActionIcon>
-		<ActionIcon size="sm" variant="subtle" color="yellow" onClick={() => onEdit(event)}>
+		<ActionIcon
+			size="sm"
+			variant="subtle"
+			color="yellow"
+			onClick={() => onEdit(event)}
+		>
 			<IconEdit size={16} />
 		</ActionIcon>
-		<ActionIcon size="sm" variant="subtle" color="red" onClick={() => onDelete(event.id)}>
+		<ActionIcon
+			size="sm"
+			variant="subtle"
+			color="red"
+			onClick={() => onDelete(event.id)}
+		>
 			<IconTrash size={16} />
 		</ActionIcon>
 	</Group>
 );
-
-// Event badge component for amount display
 interface EventBadgeProps {
 	event: Event;
 	variant?: "filled" | "light";
 	size?: "sm" | "md" | "lg";
 }
 
-const EventBadge: React.FC<EventBadgeProps> = ({ event, variant = "filled", size = "sm" }) => (
+const EventBadge: React.FC<EventBadgeProps> = ({
+	event,
+	variant = "filled",
+	size = "sm",
+}) => (
 	<Badge color={getEventColor(event.tipo)} variant={variant} size={size}>
-		{getEventSign(event.tipo)}{formatCurrency(event.cantidad)}
+		{getEventSign(event.tipo)}
+		{formatCurrency(event.cantidad)}
 	</Badge>
 );
-
-// Individual event card component
 interface EventCardProps {
 	event: Event;
 	onView: (event: Event) => void;
@@ -71,7 +91,12 @@ interface EventCardProps {
 	onDelete: (eventId: string) => void;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ event, onView, onEdit, onDelete }) => (
+const EventCard: React.FC<EventCardProps> = ({
+	event,
+	onView,
+	onEdit,
+	onDelete,
+}) => (
 	<Card key={event.id} padding="sm" radius="sm" withBorder>
 		<Group justify="space-between" align="center">
 			<Group gap="sm" align="center">
@@ -86,11 +111,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, onView, onEdit, onDelete }
 				<Tooltip id={`tooltip-${event.id}`} />
 				<EventBadge event={event} />
 			</Group>
-			<EventActions 
-				event={event} 
-				onView={onView} 
-				onEdit={onEdit} 
-				onDelete={onDelete} 
+			<EventActions
+				event={event}
+				onView={onView}
+				onEdit={onEdit}
+				onDelete={onDelete}
 			/>
 		</Group>
 	</Card>
@@ -121,7 +146,8 @@ const MonthCardComponent: React.FC<MonthCardProps> = ({
 			pipe(
 				events,
 				(events) => events.filter((event) => event.tipo === tipo),
-				(filteredEvents) => filteredEvents.reduce((sum, event) => sum + event.cantidad, 0)
+				(filteredEvents) =>
+					filteredEvents.reduce((sum, event) => sum + event.cantidad, 0),
 			);
 
 		return {

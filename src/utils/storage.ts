@@ -15,16 +15,20 @@ const parseEvents = (data: string): Event[] => {
 	}));
 };
 
-const isValidTheme = (theme: string): theme is ThemeMode => 
+const isValidTheme = (theme: string): theme is ThemeMode =>
 	theme === "light" || theme === "dark";
 
 export const storageUtils = {
 	saveEvents: (events: Event[]): void => {
 		pipe(
 			Effect.sync(() => JSON.stringify(events)),
-			Effect.flatMap(data => Effect.sync(() => localStorage.setItem(STORAGE_KEYS.EVENTS, data))),
-			Effect.catchAll(() => Effect.sync(() => console.error("Error saving events to localStorage"))),
-			Effect.runSync
+			Effect.flatMap((data) =>
+				Effect.sync(() => localStorage.setItem(STORAGE_KEYS.EVENTS, data)),
+			),
+			Effect.catchAll(() =>
+				Effect.sync(() => console.error("Error saving events to localStorage")),
+			),
+			Effect.runSync,
 		);
 	},
 
@@ -32,20 +36,24 @@ export const storageUtils = {
 		return pipe(
 			Effect.sync(() => localStorage.getItem(STORAGE_KEYS.EVENTS)),
 			Effect.map(Option.fromNullable),
-			Effect.flatMap(Option.match({
-				onNone: () => Effect.succeed([]),
-				onSome: data => Effect.try(() => parseEvents(data))
-			})),
+			Effect.flatMap(
+				Option.match({
+					onNone: () => Effect.succeed([]),
+					onSome: (data) => Effect.try(() => parseEvents(data)),
+				}),
+			),
 			Effect.catchAll(() => Effect.succeed([])),
-			Effect.runSync
+			Effect.runSync,
 		);
 	},
 
 	saveTheme: (theme: ThemeMode): void => {
 		pipe(
 			Effect.sync(() => localStorage.setItem(STORAGE_KEYS.THEME, theme)),
-			Effect.catchAll(() => Effect.sync(() => console.error("Error saving theme to localStorage"))),
-			Effect.runSync
+			Effect.catchAll(() =>
+				Effect.sync(() => console.error("Error saving theme to localStorage")),
+			),
+			Effect.runSync,
 		);
 	},
 
@@ -53,12 +61,15 @@ export const storageUtils = {
 		return pipe(
 			Effect.sync(() => localStorage.getItem(STORAGE_KEYS.THEME)),
 			Effect.map(Option.fromNullable),
-			Effect.flatMap(Option.match({
-				onNone: () => Effect.succeed("light" as ThemeMode),
-				onSome: theme => Effect.succeed(isValidTheme(theme) ? theme : "light")
-			})),
+			Effect.flatMap(
+				Option.match({
+					onNone: () => Effect.succeed("light" as ThemeMode),
+					onSome: (theme) =>
+						Effect.succeed(isValidTheme(theme) ? theme : "light"),
+				}),
+			),
 			Effect.catchAll(() => Effect.succeed("light" as ThemeMode)),
-			Effect.runSync
+			Effect.runSync,
 		);
 	},
 
@@ -68,8 +79,10 @@ export const storageUtils = {
 				localStorage.removeItem(STORAGE_KEYS.EVENTS);
 				localStorage.removeItem(STORAGE_KEYS.THEME);
 			}),
-			Effect.catchAll(() => Effect.sync(() => console.error("Error clearing localStorage"))),
-			Effect.runSync
+			Effect.catchAll(() =>
+				Effect.sync(() => console.error("Error clearing localStorage")),
+			),
+			Effect.runSync,
 		);
 	},
 };

@@ -41,12 +41,24 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 
 	const form = useForm<EventFormData>({
 		initialValues: {
-			nombre: Option.fromNullable(event?.nombre).pipe(Option.getOrElse(() => "")),
-			descripcion: Option.fromNullable(event?.descripcion).pipe(Option.getOrElse(() => "")),
-			cantidad: Option.fromNullable(event?.cantidad).pipe(Option.getOrElse(() => 0)),
-			fecha: Option.fromNullable(event?.fecha).pipe(Option.getOrElse(() => dateHelpers.getCurrentDate())),
-			tipo: Option.fromNullable(event?.tipo).pipe(Option.getOrElse(() => "ingreso" as const)),
-			adjunto: Option.fromNullable(event?.adjunto).pipe(Option.getOrElse(() => "")),
+			nombre: Option.fromNullable(event?.nombre).pipe(
+				Option.getOrElse(() => ""),
+			),
+			descripcion: Option.fromNullable(event?.descripcion).pipe(
+				Option.getOrElse(() => ""),
+			),
+			cantidad: Option.fromNullable(event?.cantidad).pipe(
+				Option.getOrElse(() => 0),
+			),
+			fecha: Option.fromNullable(event?.fecha).pipe(
+				Option.getOrElse(() => dateHelpers.getCurrentDate()),
+			),
+			tipo: Option.fromNullable(event?.tipo).pipe(
+				Option.getOrElse(() => "ingreso" as const),
+			),
+			adjunto: Option.fromNullable(event?.adjunto).pipe(
+				Option.getOrElse(() => ""),
+			),
 		},
 		validate: zodResolver(eventCreateSchema),
 	});
@@ -59,16 +71,16 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 					const updatedEvent: Event = { ...event, ...values };
 					dispatch(updateEvent(updatedEvent));
 				}),
-				Match.orElse(() => dispatch(addEvent(values)))
+				Match.orElse(() => dispatch(addEvent(values))),
 			);
 
 			// Update localStorage
 			const events = storageUtils.loadEvents();
 			const updatedEvents = Match.value({ isEditing, event }).pipe(
-				Match.when({ isEditing: true }, ({ event }) => 
-					events.map((e) => (e.id === event.id ? { ...event, ...values } : e))
+				Match.when({ isEditing: true }, ({ event }) =>
+					events.map((e) => (e.id === event.id ? { ...event, ...values } : e)),
 				),
-				Match.orElse(() => [...events, { ...values, id: crypto.randomUUID() }])
+				Match.orElse(() => [...events, { ...values, id: crypto.randomUUID() }]),
 			);
 
 			storageUtils.saveEvents(updatedEvents);
@@ -93,11 +105,15 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 					onNone: () => Effect.sync(() => form.setFieldValue("adjunto", "")),
 					onSome: (file) =>
 						Effect.tryPromise(() => readFileAsBase64(file)).pipe(
-							Effect.tap((base64) => Effect.sync(() => form.setFieldValue("adjunto", base64))),
-							Effect.catchAll(() => Effect.sync(() => console.error("Failed to read file")))
+							Effect.tap((base64) =>
+								Effect.sync(() => form.setFieldValue("adjunto", base64)),
+							),
+							Effect.catchAll(() =>
+								Effect.sync(() => console.error("Failed to read file")),
+							),
 						),
 				}),
-				Effect.runPromise
+				Effect.runPromise,
 			);
 		},
 		[form],

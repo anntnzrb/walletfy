@@ -7,10 +7,7 @@ import { deleteEvent } from "../redux/slices/eventsSlice";
 import type { Event } from "../types/Event";
 import { dateHelpers } from "../utils/dateHelpers";
 import { storageUtils } from "../utils/storage";
-import { EventBadge } from "./EventBadge";
-import { EventCard } from "./EventCard";
-
-const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+import { EventDisplay, formatCurrency } from "./ui/EventDisplay";
 
 interface MonthCardProps {
 	monthKey: string;
@@ -86,13 +83,15 @@ const MonthCardComponent: React.FC<MonthCardProps> = ({
 
 					<Stack gap="xs">
 						{events.map((event) => (
-							<EventCard
+							<EventDisplay.Root
 								key={event.id}
 								event={event}
 								onView={handleViewEvent}
 								onEdit={onEditEvent}
 								onDelete={handleDeleteEvent}
-							/>
+							>
+								<EventDisplay.Card />
+							</EventDisplay.Root>
 						))}
 					</Stack>
 				</Stack>
@@ -112,7 +111,9 @@ const MonthCardComponent: React.FC<MonthCardProps> = ({
 						</Group>
 						<Group justify="space-between">
 							<Text fw={500}>Cantidad:</Text>
-							<EventBadge event={selectedEvent} />
+							<EventDisplay.Root event={selectedEvent}>
+								<EventDisplay.Badge />
+							</EventDisplay.Root>
 						</Group>
 						<Group justify="space-between">
 							<Text fw={500}>Fecha:</Text>

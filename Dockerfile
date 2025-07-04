@@ -1,14 +1,14 @@
 FROM oven/bun:1-alpine AS builder
 
 WORKDIR /app
-
 COPY package.json bun.lock ./
-RUN bun install
+RUN bun install --production --frozen-lockfile
 
 COPY . .
 RUN bun run build
 
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM busybox:stable
+COPY --from=builder /app/dist /www
+WORKDIR /www
+EXPOSE 8080
+CMD ["httpd", "-f", "-p", "8080"]

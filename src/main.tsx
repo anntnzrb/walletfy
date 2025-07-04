@@ -1,5 +1,8 @@
 import { MantineProvider, createTheme } from "@mantine/core";
+import { DatesProvider } from "@mantine/dates";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import dayjs from "dayjs";
+import "dayjs/locale/es";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
@@ -12,6 +15,8 @@ import { routeTree } from "./routeTree.gen";
 import "./styles.css";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
+
+dayjs.locale("es");
 
 const router = createRouter({
 	routeTree,
@@ -96,9 +101,11 @@ if (rootElement && !rootElement.innerHTML) {
 		<StrictMode>
 			<Provider store={store}>
 				<MantineProvider theme={theme}>
-					<TanStackQueryProvider.Provider>
-						<RouterProvider router={router} />
-					</TanStackQueryProvider.Provider>
+					<DatesProvider settings={{ locale: dayjs.locale(), firstDayOfWeek: 1 }}>
+						<TanStackQueryProvider.Provider>
+							<RouterProvider router={router} />
+						</TanStackQueryProvider.Provider>
+					</DatesProvider>
 				</MantineProvider>
 			</Provider>
 		</StrictMode>,

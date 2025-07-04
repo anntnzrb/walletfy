@@ -145,7 +145,16 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 					label="Fecha"
 					placeholder="Selecciona una fecha"
 					required
-					{...form.getInputProps("fecha")}
+					valueFormat="DD/MM/YYYY"
+					value={form.values.fecha}
+					onChange={(value) => {
+						const dateValue = value instanceof Date ? value : value ? new Date(value) : null;
+						form.setFieldValue("fecha", dateValue);
+						if (form.errors.fecha) {
+							form.clearFieldError("fecha");
+						}
+					}}
+					error={form.errors.fecha}
 				/>
 
 				<Select

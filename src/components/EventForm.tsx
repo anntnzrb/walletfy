@@ -16,7 +16,7 @@ import {
 	IconRefresh,
 	IconX,
 } from "@tabler/icons-react";
-import { Match } from "effect";
+import { Match, Option } from "effect";
 import React, { useCallback } from "react";
 import { useAppDispatch } from "../redux/hooks";
 import { addEvent, updateEvent } from "../redux/slices/eventsSlice";
@@ -41,12 +41,12 @@ const EventFormComponent: React.FC<EventFormProps> = ({
 
 	const form = useForm<EventFormData>({
 		initialValues: {
-			nombre: event?.nombre || "",
-			descripcion: event?.descripcion || "",
-			cantidad: event?.cantidad || 0,
-			fecha: event?.fecha || dateHelpers.getCurrentDate(),
-			tipo: event?.tipo || "ingreso",
-			adjunto: event?.adjunto || "",
+			nombre: Option.fromNullable(event?.nombre).pipe(Option.getOrElse(() => "")),
+			descripcion: Option.fromNullable(event?.descripcion).pipe(Option.getOrElse(() => "")),
+			cantidad: Option.fromNullable(event?.cantidad).pipe(Option.getOrElse(() => 0)),
+			fecha: Option.fromNullable(event?.fecha).pipe(Option.getOrElse(() => dateHelpers.getCurrentDate())),
+			tipo: Option.fromNullable(event?.tipo).pipe(Option.getOrElse(() => "ingreso" as const)),
+			adjunto: Option.fromNullable(event?.adjunto).pipe(Option.getOrElse(() => "")),
 		},
 		validate: zodResolver(eventCreateSchema),
 	});

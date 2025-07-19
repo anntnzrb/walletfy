@@ -1,0 +1,12 @@
+[test]
+# Load the test setup file before running tests
+preload = "./src/test/setup.ts"
+
+# Set test environment
+environment = "bun"
+
+# Enable test coverage
+coverage = true
+
+# Test file patterns
+test_pattern = ["**/*.test.ts", "**/*.test.tsx"]
